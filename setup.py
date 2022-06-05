@@ -7,7 +7,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="jdoc",
-    version="0.0.5",
+    version="0.0.7",
     author="sheng-kai-wang",
     author_email="nssh94879487@gmail.com",
     description="java doc search engine",
@@ -24,12 +24,12 @@ setuptools.setup(
     include_package_data=True,
     py_modules=['jdoc'],
     install_requires=[
-        'pyfiglet==0.8.post1',
+        # 'pyfiglet==0.8.post1',
         'click==8.1.3',
     ],
     entry_points={
         'console_scripts': [
-            'jdoc = app:cli',
+            'jdoc = app.app:cli',
         ]
     }
 )

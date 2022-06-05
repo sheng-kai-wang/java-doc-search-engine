@@ -1,10 +1,10 @@
 import click
-from pyfiglet import Figlet
+# from pyfiglet import Figlet
 
 
-def show_figlet():
-    f = Figlet(font='slant')
-    print(f.renderText('java doc'))
+# def show_figlet():
+#     f = Figlet(font='slant')
+#     print(f.renderText('java doc'))
 
 
 @click.group()
@@ -18,7 +18,7 @@ def cli(ctx):
 @click.option('-c', '--classname', type=str, help='Search by class name for feature description.')
 @click.option('-d', '--description', type=str, help='Search by description of class for class name.')
 def jclass(classname, description):
-    show_figlet()
+    # show_figlet()
     if classname != None:
         print('class:', classname)
     if description != None:
@@ -29,7 +29,7 @@ def jclass(classname, description):
 @click.option('-c', '--classname', type=str, required=True, help='Search by class name for similar class.')
 @click.option('-m', '--method', type=str, help='Search by method name for similar method.')
 def jsimilar(classname, method):
-    show_figlet()
+    # show_figlet()
     if method is None:
         print('class:', classname)
     else:
