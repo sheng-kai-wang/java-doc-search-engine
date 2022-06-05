@@ -4,14 +4,15 @@ import setuptools
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
+
 setuptools.setup(
-    name="jdoc", # 
-    version="0.0.1",
+    name="jdoc",
+    version="0.0.5",
     author="sheng-kai-wang",
     author_email="nssh94879487@gmail.com",
     description="java doc search engine",
-    # long_description=long_description,
-    # long_description_content_type="text/markdown",
+    long_description=long_description,
+    long_description_content_type="text/markdown",
     url="https://github.com/pypa/sampleproject",
     packages=setuptools.find_packages(),
     classifiers=[
@@ -20,4 +21,15 @@ setuptools.setup(
         "Operating System :: OS Independent",
     ],
     python_requires='>=3.6',
+    include_package_data=True,
+    py_modules=['jdoc'],
+    install_requires=[
+        'pyfiglet==0.8.post1',
+        'click==8.1.3',
+    ],
+    entry_points={
+        'console_scripts': [
+            'jdoc = app:cli',
+        ]
+    }
 )
