@@ -1,0 +1,80 @@
+# import yaml
+import json
+import jsonpath
+import math
+import numpy as np
+import pandas as pd
+from collections import defaultdict
+import statistics
+from itertools import product
+
+# 安裝 WordNet
+import nltk
+nltk.download('punkt')
+nltk.download('wordnet')
+nltk.download('stopwords')
+nltk.download('omw-1.4')
+from nltk.corpus import wordnet as wn
+
+data = open("JAVA_DOC.json", "r", encoding='UTF-8').read()
+data = json.loads(data)
+
+lemmatizer = nltk.stem.WordNetLemmatizer()
+stop_words = set(nltk.corpus.stopwords.words('english'))
+
+classNameList = []
+#nltkDescribeList = []
+nullClassNameList = []
+index = []
+
+#javaDocNltkDict = {}
+nullJavaDocDict = {}
+javaDocDFTF = {}
+
+for className in data:
+    if type(data[className]['Describe']) != list:
+        classNameList.append(className) 
+        
+        word_set = nltk.word_tokenize(data[className]['Describe'].lower())        
+        # remove stop words
+        word_set = [w for w in word_set if w not in stop_words]
+        # lemmatization
+        word_set = [lemmatizer.lemmatize(w) for w in word_set]
+        
+        #nltkDescribeList.append(word_set)
+        #javaDocNltkDict.setdefault(className, word_set)
+        
+        for word in word_set:
+            if word not in javaDocDFTF:
+                javaDocDFTF.setdefault(word, {'df':1, 'inv_list':[]})
+                javaDocDFTF[word]['inv_list'].append({'className':className, 'tf':1})
+                index.append(word)
+            
+            else:
+                if className == javaDocDFTF[word.lower()]['inv_list'][-1]['className']:
+                    javaDocDFTF[word]['inv_list'][-1]['tf'] += 1
+                    
+                else:
+                    javaDocDFTF[word]['df'] += 1
+                    javaDocDFTF[word]['inv_list'].append({'className':className, 'tf':1})
+        
+    else:
+        nullClassNameList.append(className)
+        nullJavaDocDict.setdefault(className, data[className])
+        
+value = np.zeros((len(javaDocDFTF), len(classNameList)), dtype=float)
+javaDocWeights = pd.DataFrame(value, index=index, columns=classNameList)
+
+for className in javaDocDFTF:
+    for invList in javaDocDFTF[className]['inv_list']:
+        javaDocWeights[invList['className']][className] = (1 + math.log(invList['tf'], 10)) * math.log(len(classNameList)/javaDocDFTF[className]['df'], 10)
+        
+'''
+with open('JavaDoc_NLTK.json', 'w') as f:
+    json.dump(javaDocNltkDict, f, indent=2)
+    
+with open('JavaDoc_Null_Describe.json', 'w') as f:
+    json.dump(nullJavaDocDict, f, indent=2)
+
+javaDocWeights.to_csv('Java_Doc_Weights.csv')  
+'''   
