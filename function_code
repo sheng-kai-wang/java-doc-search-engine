@@ -1,0 +1,109 @@
+import json
+import jsonpath
+import fnmatch
+import pandas as pd
+
+# 安裝 WordNet
+import nltk
+nltk.download('punkt')
+nltk.download('wordnet')
+nltk.download('stopwords')
+nltk.download('omw-1.4')
+from nltk.corpus import wordnet as wn
+
+data = open("JAVA_DOC.json", "r", encoding='UTF-8').read()
+javaDocData = json.loads(data)
+
+javaDocWeightsData = pd.read_csv('Java_Doc_Weights.csv', index_col = 0)
+
+#根據大寫字元分割 class 名稱或 function 名稱
+#input str queryTerm, str 'class' 或 'function' 默認為 'class'
+#return list splitChar
+def _split_char(queryTerm, model = 'class'):
+    uppercasePositionList = []
+    splitChar = []
+    
+    for charId, char in enumerate(queryTerm):
+        if char.isupper() == True:
+            uppercasePositionList.append(charId)
+    
+    for uppercasePositionId, uppercasePosition in enumerate(uppercasePositionList):
+        if uppercasePositionId != len(uppercasePositionList) - 1:
+            splitChar.append(queryTerm[uppercasePosition:uppercasePositionList[uppercasePositionId + 1]])
+            
+        else:
+            splitChar.append(queryTerm[uppercasePosition:])
+    
+    if model == 'class':
+        if uppercasePositionList[0] != 0:
+            splitChar[0] = queryTerm[:uppercasePositionList[0]] + splitChar[0]
+            return splitChar
+        
+        else:
+            return splitChar
+            
+    elif model == 'function':
+        if uppercasePositionList[0] != 0:
+            splitChar.insert(0, queryTerm[:uppercasePositionList[0]])
+        return splitChar
+    
+    else:
+        return '沒有此模式或者模式輸入錯誤。'
+    
+
+#用 class 名稱搜尋得到功能敘述
+#input str queryTerm, dict data 默認為 javaDocData
+def class_name_to_describe(queryTerm, data = javaDocData):
+    if queryTerm in data:
+        print('Describe:\n', data[queryTerm]['Describe'], '\n')
+
+    else:
+        print('查無此類別，或著您的搜尋詞有輸入錯誤。')
+
+#用功能敘述搜尋 class 名稱
+def describe_to_class_name(queryTerm, data = javaDocWeightsData):
+    lemmatizer = nltk.stem.WordNetLemmatizer()
+    stop_words = set(nltk.corpus.stopwords.words('english'))
+    
+    word_set = nltk.word_tokenize(queryTerm.lower())        
+    # remove stop words
+    word_set = [w for w in word_set if w not in stop_words]
+    # lemmatization
+    word_set = [lemmatizer.lemmatize(w) for w in word_set]
+    
+    queryTermWeightsList = []
+    for word in word_set:
+        wordWeights = pd.DataFrame(javaDocWeightsData.loc[word])
+        wordWeights = wordWeights.sort_values(by = [word], ascending = False)
+        wordWeights.drop(wordWeights[wordWeights[word] == 0].index, inplace = True)
+        queryTermWeightsList.append([wordWeights.index.tolist(), wordWeights.values.tolist()])
+    
+    if len(word_set) != 1:        
+        for queryTermWeightsId, queryTermWeights in enumerate(queryTermWeightsList):
+            if queryTermWeightsId == 0:
+                intersection = list(set(queryTermWeightsList[0][0]).intersection(set(queryTermWeightsList[1][0])))
+                
+            else:
+                intersection = list(set(intersection).intersection(set(queryTermWeights[0])))
+        
+        intersectionWeightsList = []
+        for intersectionId, intersectionWord in enumerate(intersection):
+            weightScore = 0
+            
+            for queryTermWeightsId, queryTermWeights in enumerate(queryTermWeightsList):
+                weightScore += queryTermWeights[1][queryTermWeights[0].index(intersectionWord)][0]
+            
+            intersectionWeightsList.append(weightScore)
+            
+        intersectionWeightsList = pd.DataFrame(intersectionWeightsList, index=intersection, columns=['weights'])
+        intersectionWeightsList = intersectionWeightsList.sort_values(by = ['weights'], ascending = False)
+        print(intersectionWeightsList[:10])
+    
+    else:
+        print(wordWeights[:10])
+
+#用 class 名稱搜尋相似的 class
+def class_name_to_similar_class_name(queryTerm, data = javaDocData):
+    print(_split_char(queryTerm))
+    
+    #print(fnmatch.filter(lst, '*AbstractAction*'))
