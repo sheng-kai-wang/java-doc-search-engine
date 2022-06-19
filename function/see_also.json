@@ -1,0 +1,233 @@
+{
+    "java.awt_AWTEvent": [
+        "ActionEvent",
+        "AdjustmentEvent",
+        "ComponentEvent",
+        "ContainerEvent",
+        "FocusEvent",
+        "InputMethodEvent",
+        "InvocationEvent",
+        "ItemEvent",
+        "HierarchyEvent",
+        "KeyEvent",
+        "MouseEvent",
+        "MouseWheelEvent",
+        "PaintEvent",
+        "TextEvent",
+        "WindowEvent"
+    ],
+    "java.util_Calendar": ["Date", "GregorianCalendar", "TimeZone", "DateFormat"],
+    "java.util_HashMap": ["Collection", "Map", "TreeMap", "Hashtable"],
+    "java.util_Hashtable": ["Collection", "Map", "HashMap", "TreeMap"],
+    "java.awt.event_InputEvent": [
+        "KeyEvent",
+        "KeyAdapter",
+        "MouseEvent",
+        "MouseAdapter",
+        "MouseMotionAdapter"
+    ],
+    "java.io_InputStream": [
+        "BufferedInputStream",
+        "ByteArrayInputStream",
+        "DataInputStream",
+        "FilterInputStream",
+        "OutputStream",
+        "PushbackInputStream"
+    ],
+    "javax.naming_InvalidNameException": [
+        "Context",
+        "DirContext",
+        "CompositeName",
+        "CompoundName",
+        "NameParser"
+    ],
+    "java.net_JarURLConnection": [
+        "URL",
+        "URLConnection",
+        "JarFile",
+        "JarInputStream",
+        "Manifest",
+        "ZipEntry"
+    ],
+    "javax.xml.bind_JAXBPermission": [
+        "BasicPermission",
+        "Permission",
+        "Permissions",
+        "PermissionCollection",
+        "SecurityManager"
+    ],
+    "javax.swing_JSpinner": [
+        "SpinnerModel",
+        "AbstractSpinnerModel",
+        "SpinnerListModel",
+        "SpinnerNumberModel",
+        "SpinnerDateModel",
+        "JFormattedTextField"
+    ],
+    "javax.security.auth.kerberos_KerberosTicket": [
+        "Subject",
+        "PrivateCredentialPermission",
+        "LoginContext",
+        "GSSCredential",
+        "GSSManager"
+    ],
+    "java.awt_KeyboardFocusManager": [
+        "Window",
+        "Frame",
+        "Dialog",
+        "FocusEvent",
+        "WindowEvent",
+        "KeyEvent"
+    ],
+    "java.security_KeyFactory": [
+        "Key",
+        "PublicKey",
+        "PrivateKey",
+        "KeySpec",
+        "DSAPublicKeySpec",
+        "X509EncodedKeySpec"
+    ],
+    "java.util_LinkedHashSet": [
+        "Collection",
+        "Set",
+        "HashSet",
+        "TreeSet",
+        "Hashtable"
+    ],
+    "java.util_Locale": ["ResourceBundle", "Format", "NumberFormat", "Collator"],
+    "java.util.logging_LoggingPermission": [
+        "BasicPermission",
+        "Permission",
+        "Permissions",
+        "PermissionCollection",
+        "SecurityManager"
+    ],
+    "java.awt_MenuBar": ["Frame", "Menu", "MenuItem", "MenuShortcut"],
+    "java.awt.event_MouseEvent": [
+        "MouseAdapter",
+        "MouseListener",
+        "MouseMotionAdapter",
+        "MouseMotionListener",
+        "MouseWheelListener"
+    ],
+    "java.io_OutputStream": [
+        "BufferedOutputStream",
+        "ByteArrayOutputStream",
+        "DataOutputStream",
+        "FilterOutputStream",
+        "InputStream"
+    ],
+    "java.io_Reader": [
+        "BufferedReader",
+        "LineNumberReader",
+        "CharArrayReader",
+        "InputStreamReader",
+        "FileReader",
+        "FilterReader",
+        "PushbackReader",
+        "PipedReader",
+        "StringReader",
+        "Writer"
+    ],
+    "java.security.spec_RSAMultiPrimePrivateCrtKeySpec": [
+        "Key",
+        "KeyFactory",
+        "KeySpec",
+        "PKCS8EncodedKeySpec",
+        "RSAPrivateKeySpec",
+        "RSAPublicKeySpec",
+        "RSAOtherPrimeInfo"
+    ],
+    "java.lang_SecurityManager": [
+        "ClassLoader",
+        "SecurityException",
+        "checkTopLevelWindow",
+        "getSecurityManager",
+        "setSecurityManager",
+        "AccessController",
+        "AccessControlContext",
+        "AccessControlException",
+        "Permission",
+        "BasicPermission",
+        "FilePermission",
+        "SocketPermission",
+        "PropertyPermission",
+        "RuntimePermission",
+        "AWTPermission",
+        "Policy",
+        "SecurityPermission",
+        "ProtectionDomain"
+    ],
+    "java.io_SerializablePermission": [
+        "BasicPermission",
+        "Permission",
+        "Permissions",
+        "PermissionCollection",
+        "SecurityManager"
+    ],
+    "javax.swing_SpinnerDateModel": [
+        "JSpinner",
+        "SpinnerModel",
+        "AbstractSpinnerModel",
+        "SpinnerListModel",
+        "SpinnerNumberModel"
+    ],
+    "java.sql_SQLPermission": [
+        "BasicPermission",
+        "Permission",
+        "Permissions",
+        "PermissionCollection",
+        "SecurityManager"
+    ],
+    "java.util_TreeMap": [
+        "Map",
+        "HashMap",
+        "Hashtable",
+        "Comparable",
+        "Comparator",
+        "Collection"
+    ],
+    "java.util_TreeSet": [
+        "Collection",
+        "Set",
+        "HashSet",
+        "Comparable",
+        "Comparator",
+        "TreeMap"
+    ],
+    "java.rmi.activation_UnknownGroupException": [
+        "Activatable",
+        "ActivationGroup",
+        "ActivationGroupID",
+        "ActivationMonitor",
+        "ActivationSystem"
+    ],
+    "java.rmi.activation_UnknownObjectException": [
+        "Activatable",
+        "ActivationGroup",
+        "ActivationID",
+        "ActivationMonitor",
+        "ActivationSystem",
+        "Activator"
+    ],
+    "java.io_Writer": [
+        "Writer",
+        "BufferedWriter",
+        "CharArrayWriter",
+        "FilterWriter",
+        "OutputStreamWriter",
+        "FileWriter",
+        "PipedWriter",
+        "PrintWriter",
+        "StringWriter",
+        "Reader"
+    ],
+    "org.xml.sax.helpers_XMLFilterImpl": [
+        "XMLFilter",
+        "XMLReader",
+        "EntityResolver",
+        "DTDHandler",
+        "ContentHandler",
+        "ErrorHandler"
+    ]
+}

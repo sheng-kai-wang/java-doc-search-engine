@@ -1,0 +1,70 @@
+{
+  "HashMap": [
+    "TreeMap",
+    "Hashtable"
+  ],
+  "Hashtable": [
+    "HashMap",
+    "TreeMap"
+  ],
+  "InvalidNameException": [
+    "CompositeName",
+    "CompoundName"
+  ],
+  "JSpinner": [
+    "SpinnerListModel",
+    "SpinnerNumberModel",
+    "SpinnerDateModel",
+    "JFormattedTextField"
+  ],
+  "KerberosTicket": [
+    "LoginContext"
+  ],
+  "KeyFactory": [
+    "DSAPublicKeySpec",
+    "X509EncodedKeySpec"
+  ],
+  "LinkedHashSet": [
+    "HashSet",
+    "TreeSet",
+    "Hashtable"
+  ],
+  "MenuBar": [
+    "Frame",
+    "Menu",
+    "MenuItem",
+    "MenuShortcut"
+  ],
+  "RSAMultiPrimePrivateCrtKeySpec": [
+    "KeyFactory",
+    "PKCS8EncodedKeySpec",
+    "RSAPrivateKeySpec",
+    "RSAPublicKeySpec",
+    "RSAOtherPrimeInfo"
+  ],
+  "SecurityManager": [
+    "SecurityException",
+    "AccessControlException",
+    "Policy",
+    "ProtectionDomain"
+  ],
+  "SpinnerDateModel": [
+    "JSpinner",
+    "SpinnerListModel",
+    "SpinnerNumberModel"
+  ],
+  "TreeMap": [
+    "HashMap",
+    "Hashtable"
+  ],
+  "TreeSet": [
+    "HashSet",
+    "TreeMap"
+  ],
+  "UnknownGroupException": [
+    "ActivationGroupID"
+  ],
+  "UnknownObjectException": [
+    "ActivationID"
+  ]
+}
