@@ -1,11 +1,11 @@
 import click
 from pyfiglet import Figlet
-from config import __version__
+from app.config import __version__
 
-from function.function_code import class_name_to_describe
-from function.function_code import describe_to_class_name
-from function.function_code import class_describe_to_similar_class_name
-from function.function_code import class_name_and_function_name_to_similar_function_name
+from app.function.function_code import class_name_to_describe
+from app.function.function_code import describe_to_class_name
+from app.function.function_code import class_describe_to_similar_class_name
+from app.function.function_code import class_name_and_function_name_to_similar_function_name
 
 
 def show_figlet():

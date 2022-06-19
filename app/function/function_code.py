@@ -13,48 +13,14 @@ nltk.download('stopwords', quiet=True)
 nltk.download('omw-1.4', quiet=True)
 from nltk.corpus import wordnet as wn
 
-data = open("function/JAVA_DOC.json", "r", encoding='UTF-8').read()
+data = open("java_doc/JAVA_DOC.json", "r", encoding='UTF-8').read()
 javaDocData = json.loads(data)
 
-javaDocWeightsData = pd.read_csv('function/Java_Doc_Weights.csv', index_col = 0)
-javaDocSimilarity = pd.read_csv('function/Java_Doc_Similarity.csv', index_col = 0)
+javaDocWeightsData = pd.read_csv('java_doc/Java_Doc_Weights.csv', index_col = 0)
+javaDocSimilarity = pd.read_csv('java_doc/Java_Doc_Similarity.csv', index_col = 0)
 
-data = open("function/Java_Doc_Function_Similarity.json", "r", encoding='UTF-8').read()
+data = open("java_doc/Java_Doc_Function_Similarity.json", "r", encoding='UTF-8').read()
 javaDocFunctionSimilarityData = json.loads(data)
-
-#根據大寫字元分割 class 名稱或 function 名稱
-#input: str queryTerm, str 'class' 或 'function' 默認為 'class'
-#return: list splitChar
-def _split_char(queryTerm, model = 'class'):
-    uppercasePositionList = []
-    splitChar = []
-    
-    for charId, char in enumerate(queryTerm):
-        if char.isupper() == True:
-            uppercasePositionList.append(charId)
-    
-    for uppercasePositionId, uppercasePosition in enumerate(uppercasePositionList):
-        if uppercasePositionId != len(uppercasePositionList) - 1:
-            splitChar.append(queryTerm[uppercasePosition:uppercasePositionList[uppercasePositionId + 1]])
-            
-        else:
-            splitChar.append(queryTerm[uppercasePosition:])
-    
-    if model == 'class':
-        if uppercasePositionList[0] != 0:
-            splitChar[0] = queryTerm[:uppercasePositionList[0]] + splitChar[0]
-            return splitChar
-        
-        else:
-            return splitChar
-            
-    elif model == 'function':
-        if uppercasePositionList[0] != 0:
-            splitChar.insert(0, queryTerm[:uppercasePositionList[0]])
-        return splitChar
-    
-    else:
-        return '沒有此模式或者模式輸入錯誤。'
 
 #將相同分數的索引按照索引名稱排序，之後將結果 print 出來
 #input: DataFrame similarityDataFrameTop10, str functionNameQueryTerm, str functionName'
@@ -70,7 +36,7 @@ def _sort_index(similarityDataFrameTop10, functionNameQueryTerm, functionName):
                 scoreGroupDataFrame = dataFrame
                 
             else:                    
-                resultGroupDataFrame = scoreGroupDataFrame.append(dataFrame)
+                resultGroupDataFrame = pd.concat([scoreGroupDataFrame, dataFrame], axis=0)
                 scoreGroupDataFrame = resultGroupDataFrame
                 
         if len(scoreList) == 1:
@@ -170,7 +136,7 @@ def describe_to_class_name(queryTerm, data = javaDocWeightsData):
                 unionWeightsList.drop(intersectionWord, inplace = True)
             
             unionWeightsList = unionWeightsList.sort_values(by = ['weights'], ascending = False)        
-            resultWeightsList = intersectionWeightsList.append(unionWeightsList)
+            resultWeightsList = pd.concat([intersectionWeightsList, unionWeightsList], axis=0)
             print(resultWeightsList[:10])
             
         else:
