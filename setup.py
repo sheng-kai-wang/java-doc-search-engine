@@ -1,5 +1,5 @@
 import setuptools
-from config import __version__
+from app.resource.config import __version__
 # readme.md = github readme.md, 這裡可接受markdown寫法
 # 如果沒有的話，需要自己打出介紹此專案的檔案，再讓程式知道
 with open("README.md", "r") as fh:

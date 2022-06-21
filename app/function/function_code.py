@@ -17,7 +17,7 @@ data = open("java_doc/JAVA_DOC.json", "r", encoding='UTF-8').read()
 javaDocData = json.loads(data)
 
 javaDocWeightsData = pd.read_csv('java_doc/Java_Doc_Weights.csv', index_col = 0)
-javaDocSimilarity = pd.read_csv('java_doc/Java_Doc_Similarity.csv', index_col = 0)
+javaDocSimilarityData = pd.read_csv('java_doc/Java_Doc_Similarity.csv', index_col = 0)
 
 data = open("java_doc/Java_Doc_Function_Similarity.json", "r", encoding='UTF-8').read()
 javaDocFunctionSimilarityData = json.loads(data)
@@ -42,7 +42,15 @@ def _sort_index(similarityDataFrameTop10, functionNameQueryTerm, functionName):
         if len(scoreList) == 1:
             resultGroupDataFrame = scoreGroupDataFrame
         
-        print('------------------------------\n' + str(functionName) + '：\n')
+        print('------------------------------')
+        for splitId, splitString in enumerate(re.split(',|\n', str(functionName))):
+            if splitId != len(re.split(',|\n', str(functionName))) - 1:
+                if len(splitString) != 0:
+                    print(splitString + ',')
+            
+            else:
+                print(splitString + '：\n')
+        
         printIndexList = resultGroupDataFrame.index
         printValueList = resultGroupDataFrame.values    
            
@@ -85,68 +93,77 @@ def describe_to_class_name(queryTerm, data = javaDocWeightsData):
     # lemmatization
     word_set = [lemmatizer.lemmatize(w) for w in word_set]
     
-    queryTermWeightsList = []
+    wordList = []
     for word in word_set:
-        wordWeights = pd.DataFrame(data.loc[word])
-        wordWeights.columns = ['weights']
-        wordWeights = wordWeights.sort_values(by = ['weights'], ascending = False)
-        wordWeights.drop(wordWeights[wordWeights['weights'] == 0].index, inplace = True)
-        queryTermWeightsList.append([wordWeights.index.tolist(), wordWeights.values.tolist()])
+        if word in data.index:        
+            wordList.append(word)
     
-    if len(word_set) != 1:        
-        for queryTermWeightsId, queryTermWeights in enumerate(queryTermWeightsList):
-            if queryTermWeightsId == 0:
-                intersection = list(set(queryTermWeightsList[0][0]).intersection(set(queryTermWeightsList[1][0])))
-                union = list(set(queryTermWeightsList[0][0]).union(set(queryTermWeightsList[1][0])))
-                
-            else:
-                intersection = list(set(intersection).intersection(set(queryTermWeights[0])))
-                union = list(set(union).union(set(queryTermWeights[0])))
+    if len(word_set) != 0 and len(wordList) != 0:
+        queryTermWeightsList = []
+        for word in wordList:
+            wordWeights = pd.DataFrame(data.loc[word])
+            wordWeights.columns = ['weights']        
+            wordWeights.drop(wordWeights[wordWeights['weights'] == 0].index, inplace = True)
+            queryTermWeightsList.append([wordWeights.index.tolist(), wordWeights.values.tolist()])
         
-        intersectionWeightsList = []
-        unionWeightsList = []
-        
-        for intersectionWord in intersection:
-            weightScore = 0
-            
-            for queryTermWeights in queryTermWeightsList:
-                weightScore += queryTermWeights[1][queryTermWeights[0].index(intersectionWord)][0]
-            
-            intersectionWeightsList.append(weightScore)
-        
-        for unionWord in union:
-            weightScore = 0
-            
-            for queryTermWeights in queryTermWeightsList:
-                if unionWord in queryTermWeights[0]:
-                    weightScore += queryTermWeights[1][queryTermWeights[0].index(unionWord)][0]
+        if len(wordList) != 1:        
+            for queryTermWeightsId, queryTermWeights in enumerate(queryTermWeightsList):
+                if queryTermWeightsId == 0:
+                    intersection = list(set(queryTermWeightsList[0][0]).intersection(set(queryTermWeightsList[1][0])))
+                    union = list(set(queryTermWeightsList[0][0]).union(set(queryTermWeightsList[1][0])))
                     
                 else:
-                    weightScore += 0
-                
-            unionWeightsList.append(weightScore)
-        
-        intersectionWeightsList = pd.DataFrame(intersectionWeightsList, index=intersection, columns=['weights'])
-        intersectionWeightsList = intersectionWeightsList.sort_values(by = ['weights'], ascending = False)
-        
-        if len(intersection) < 10:
-            unionWeightsList = pd.DataFrame(unionWeightsList, index=union, columns=['weights'])
+                    intersection = list(set(intersection).intersection(set(queryTermWeights[0])))
+                    union = list(set(union).union(set(queryTermWeights[0])))
+            
+            intersectionWeightsList = []
+            unionWeightsList = []
             
             for intersectionWord in intersection:
-                unionWeightsList.drop(intersectionWord, inplace = True)
+                weightScore = 0
+                
+                for queryTermWeights in queryTermWeightsList:
+                    weightScore += queryTermWeights[1][queryTermWeights[0].index(intersectionWord)][0]
+                
+                intersectionWeightsList.append(weightScore)
             
-            unionWeightsList = unionWeightsList.sort_values(by = ['weights'], ascending = False)        
-            resultWeightsList = pd.concat([intersectionWeightsList, unionWeightsList], axis=0)
-            print(resultWeightsList[:10])
+            for unionWord in union:
+                weightScore = 0
+                
+                for queryTermWeights in queryTermWeightsList:
+                    if unionWord in queryTermWeights[0]:
+                        weightScore += queryTermWeights[1][queryTermWeights[0].index(unionWord)][0]
+                        
+                    else:
+                        weightScore += 0
+                    
+                unionWeightsList.append(weightScore)
             
+            intersectionWeightsList = pd.DataFrame(intersectionWeightsList, index=intersection, columns=['weights'])
+            intersectionWeightsList = intersectionWeightsList.sort_values(by = ['weights'], ascending = False)
+            
+            if len(intersection) < 10:
+                unionWeightsList = pd.DataFrame(unionWeightsList, index=union, columns=['weights'])
+                
+                for intersectionWord in intersection:
+                    unionWeightsList.drop(intersectionWord, inplace = True)
+                
+                unionWeightsList = unionWeightsList.sort_values(by = ['weights'], ascending = False)        
+                resultWeightsList = pd.concat([intersectionWeightsList, unionWeightsList], axis=0)
+                print(resultWeightsList[:10])                
+                
+            else:
+                print(intersectionWeightsList[:10])                
+        
         else:
-            print(intersectionWeightsList[:10])
+            wordWeights = wordWeights.sort_values(by = ['weights'], ascending = False)
+            print(wordWeights[:10])            
     
     else:
-        print(wordWeights[:10])
+        print('您並沒有輸入任何的搜索詞，或者您的搜索詞皆為停用詞，或者您的搜索詞皆不在資料集中')
 
 #用 class 的功能敘述搜尋相似的 class
-def class_describe_to_similar_class_name(queryTerm, data = javaDocSimilarity):
+def class_describe_to_similar_class_name(queryTerm, data = javaDocSimilarityData):
     numberOfExecutions = 0
     
     for className in data:
@@ -159,11 +176,11 @@ def class_describe_to_similar_class_name(queryTerm, data = javaDocSimilarity):
             numberOfExecutions += 1
 
     if numberOfExecutions == 0:
-        print('查無此 class，或著您的搜尋詞有輸入錯誤。')
+        print('查無此 class，或著您的搜尋詞有輸入錯誤。')        
 
 #用 class 名稱加 function 功能敘述，搜尋同一個 class 之下類似的 function      
-def class_name_and_function_name_to_similar_function_name(classNameQueryTerm, functionNameQueryTerm, model = 0, data = javaDocFunctionSimilarityData):
-    if model == 0 or model == 1:        
+def class_name_and_function_name_to_similar_function_name(classNameQueryTerm, functionNameQueryTerm, mode = 0, data = javaDocFunctionSimilarityData):
+    if mode == 0 or mode == 1:        
         classNumberOfExecutions = 0
     
         for className in data:
@@ -180,7 +197,7 @@ def class_name_and_function_name_to_similar_function_name(classNameQueryTerm, fu
                         similarityDataFrame.drop(similarityDataFrame[similarityDataFrame[functionNameQueryTerm] == 0].index, inplace = True)
                         similarityDataFrame = similarityDataFrame.sort_values(by = [functionNameQueryTerm], ascending = False)
                         
-                        if model == 0:                
+                        if mode == 0:                
                             index = similarityDataFrame.index
                             values = similarityDataFrame[functionNameQueryTerm].values
                             noIncludeQueryTermKeyList = []
@@ -194,7 +211,7 @@ def class_name_and_function_name_to_similar_function_name(classNameQueryTerm, fu
                             noIncludeQueryTermDataFrame = pd.DataFrame(noIncludeQueryTermValuesList, index = noIncludeQueryTermKeyList, columns = [functionNameQueryTerm])
                             similarityDataFrameTop10 = noIncludeQueryTermDataFrame[:10]
                             
-                        elif model == 1:              
+                        elif mode == 1:              
                             similarityDataFrameTop10 = similarityDataFrame[1:11]
                             
                         _sort_index(similarityDataFrameTop10, functionNameQueryTerm, functionName)

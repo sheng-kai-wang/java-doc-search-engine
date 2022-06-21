@@ -130,3 +130,10 @@ dmypy.json
 
 # exercise
 exercise/
+
+# java doc
+java_doc/
+*.json
+
+# zip
+*.zip
