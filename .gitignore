@@ -137,3 +137,6 @@ exercise/
 
 # zip
 *.zip
+
+# nlp code
+NLP_code.py
