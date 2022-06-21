@@ -132,7 +132,7 @@ dmypy.json
 exercise/
 
 # java doc
-java_doc/
+/java_doc
 *.json
 
 # zip
