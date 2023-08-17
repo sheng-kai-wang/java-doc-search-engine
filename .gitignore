@@ -127,3 +127,16 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# exercise
+exercise/
+
+# java doc
+/java_doc
+*.json
+
+# zip
+*.zip
+
+# nlp code
+NLP_code.py
